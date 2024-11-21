@@ -1,39 +1,52 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+// import React, { useState, useEffect } from 'react';
+// import { Slot } from 'expo-router';
+// import SplashScreen from './splash'; 
 
-import { useColorScheme } from '@/hooks/useColorScheme';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+// const _layout = () => {
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+//     return <Stack screenOptions={{
+//         headerShown: false
+//     }}>
+//         <Stack.Screen name="homeScreen" options={{ headerTitle: false }} />
+//         {/* <Stack.Screen name="(tabs)" options={{ headerTitle: false }} /> */}
+//         {/* <Stack.Screen name="HomePage/homePage" options={{ headerTitle: false }} /> */}
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+
+//     </Stack>
+
+
+// };
+
+// export default _layout;
+
+
+import React, { useState, useEffect } from 'react';
+import { Slot } from 'expo-router';
+import Splash from './splash';  // Path to your SplashScreen component
+
+const _layout = () => {
+    const [isSplashVisible, setIsSplashVisible] = useState(true);
+
+    useEffect(() => {
+        // Simulate splash screen for 3 seconds
+        const timer = setTimeout(() => {
+            setIsSplashVisible(false);
+        }, 3000);
+
+        // Clean up the timer when the component unmounts
+        return () => clearTimeout(timer);
+    }, []);
+
+    // If splash screen is still visible, render the SplashScreen component
+    if (isSplashVisible) {
+        return <Splash />;
     }
-  }, [loaded]);
 
-  if (!loaded) {
-    return null;
-  }
+    // After the splash screen, render child components using <Slot />
+    return <Slot />;
+};
 
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
-}
+export default _layout;
+
+
