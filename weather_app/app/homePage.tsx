@@ -68,7 +68,7 @@ const homePage = () => {
             }
 
             let location = await Location.getCurrentPositionAsync({});
-            console.log("Location: ", location);
+
             setLocation(location);
         }
 
@@ -82,7 +82,6 @@ const homePage = () => {
         // const lon = -118.7413956;
         const results = await fetch(`${BASE_URL}/weather?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=${OPEN_WEATHER_API_KEY}&units=metric`);
         // const results = await fetch(`${BASE_URL}/weather?lat=${lat}&lon=${lon}&appid=${OPEN_WEATHER_API_KEY}&units=metric`);
-
         const data = await results.json();
         //console.log(JSON.stringify(data, null, 2));
         setWeather(data);
@@ -92,7 +91,6 @@ const homePage = () => {
         if (!location) return;
         const results = await fetch(`${BASE_URL}/forecast?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=${OPEN_WEATHER_API_KEY}&units=metric`);
         const data = await results.json();
-        console.log(JSON.stringify(data, null, 2));
         setForecast(data.list);
     }
 
